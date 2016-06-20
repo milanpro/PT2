@@ -1,0 +1,15 @@
+﻿apples
+banana
+banana
+durian
+kiwi
+lychee
+nectarine
+orange
+pears
+peppers
+potato
+squash
+tomato
+tomato
+watermelon
