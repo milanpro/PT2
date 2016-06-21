@@ -11,6 +11,12 @@
       <sourceFolder url="file://$MODULE_DIR$/assignment3_sources/quellcode/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/assignment4_sources/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/assignment4_sources/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/assignment5_sources/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/assignment5_sources/test" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/assignment1_sources/quellcode/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/assignment2_sources/quellcode/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/assignment3_sources/quellcode/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/assignment4_sources/bin" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
