@@ -1,5 +1,8 @@
 package assignment5.sequences;
 
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+
 /**
  * A sequence which manages it's elements as an array.
  *

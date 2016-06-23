@@ -1,5 +1,7 @@
 package assignment5.sequences;
 
+import java.util.NoSuchElementException;
+
 /**
  * A sequence which manages it's elements as a doubly linked list.
  *

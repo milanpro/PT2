@@ -1,15 +1,15 @@
 package assignment5;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 public class SalesTest {
 
-    //Keine Tests fï¿½r diese Aufgabe, ihr kï¿½nnt ggfs selber welche schreiben
-    @Test
-    public void test() {
-        assertTrue(true);
-    }
+	//Keine Tests für diese Aufgabe, ihr könnt ggfs selber welche schreiben
+	@Test
+	public void test() {
+		assertTrue(true);
+	}
 
 }

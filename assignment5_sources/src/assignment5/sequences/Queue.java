@@ -10,7 +10,6 @@ import java.util.NoSuchElementException;
 public interface Queue<T> extends Sequence<T> {
     /**
      * Adds an element to the back of the queue.
-     *
      * @param element The element to be added.
      */
     void push_back(T element);

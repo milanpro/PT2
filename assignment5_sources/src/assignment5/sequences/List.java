@@ -10,23 +10,23 @@ import java.util.NoSuchElementException;
 public interface List<T> extends Sequence<T> {
     /**
      * Insert an element at the given index.
-     * <p>
+     *
      * <p>The new element receives the given index. All elements with indices larger than the given index have their
      * indices increased by one.</p>
      *
-     * @param index   The index at which to insert the element.
+     * @param index The index at which to insert the element.
      * @param element The element to be added.
      * @throws IndexOutOfBoundsException If the index is less than zero or adding the element at the given index would
-     *                                   leave a 'gap' in the list (that is, if the index is larger than it's size).
+     * leave a 'gap' in the list (that is, if the index is larger than it's size).
      */
     void insert(int index, T element);
 
     /**
      * Change the element at the given index.
-     * <p>
+     *
      * <p>All other elements must remain unaffected (their indices must not change).</p>
      *
-     * @param index   The index who's element should be updated.
+     * @param index The index who's element should be updated.
      * @param element The element to place at the given index.
      * @return The element previously at the given index.
      * @throws NoSuchElementException if there is no element with the given index.
@@ -44,7 +44,7 @@ public interface List<T> extends Sequence<T> {
 
     /**
      * Removes the element at given index.
-     * <p>
+     *
      * <p>All elements with indices larger than the given index have their indices decreased by one.</p>
      *
      * @param index The index of the element to remove.

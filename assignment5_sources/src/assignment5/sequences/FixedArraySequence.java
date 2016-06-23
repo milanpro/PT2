@@ -1,5 +1,7 @@
 package assignment5.sequences;
 
+import java.util.NoSuchElementException;
+
 /**
  * A sequence which manages it's elements as a circular buffer while limiting the maximum number of elements in the
  * list.

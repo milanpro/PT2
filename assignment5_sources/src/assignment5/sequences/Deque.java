@@ -10,7 +10,6 @@ import java.util.NoSuchElementException;
 public interface Deque<T> extends FixedSequence<T>, Queue<T> {
     /**
      * Adds an element to the front of the queue.
-     *
      * @param element The element to be added.
      */
     void push_front(T element);

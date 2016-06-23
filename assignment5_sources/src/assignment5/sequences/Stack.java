@@ -10,7 +10,6 @@ import java.util.NoSuchElementException;
 public interface Stack<T> extends Sequence<T> {
     /**
      * Adds an element on top of the stack.
-     *
      * @param element The element to be added.
      */
     void push_top(T element);
