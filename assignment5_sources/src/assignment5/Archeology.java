@@ -39,8 +39,6 @@ public class Archeology {
                 Sha = Sha.getRightOfIncluding(1);
             }
         }
-        //int bestcomp = 0;
-        int bestindex = 0;
         int lengthofboth;
         int roundedlob;
         boolean reversable = true;

@@ -9,8 +9,10 @@ import java.util.NoSuchElementException;
  * @param <T> The type of elements stored in this sequence.
  */
 public class ArraySequence<T> implements Sequence<T>, List<T>, Stack<T>, Queue<T> {
-    public ArraySequence() {
+    private T[] values;
 
+    public ArraySequence() {
+        this.values = (T[]) new Object[0];
     }
 
     @Override
