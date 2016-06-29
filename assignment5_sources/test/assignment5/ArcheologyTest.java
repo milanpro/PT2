@@ -79,10 +79,11 @@ public class ArcheologyTest {
 			}
 		}
 		//Shard.resetSplitCount(friend);
-		hashCode();
+		friend.hashCode();
         Shard.splitCount = 0;
 		Archeology.findCombinations(shards);
 		//Our implementation used 247416 splits
+		System.out.println(Shard.splitCount);
 		assertTrue(Shard.getSplitCount() <= 500000);
 	}
 }
