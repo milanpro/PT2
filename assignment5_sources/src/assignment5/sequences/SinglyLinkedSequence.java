@@ -155,6 +155,7 @@ public class SinglyLinkedSequence<T> implements Sequence<T>, List<T>, Stack<T>, 
     }
 
     private class Node{
+
         private T e; /*e = element*/
         private Node next;
 
