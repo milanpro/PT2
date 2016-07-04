@@ -16,13 +16,19 @@ public class FixedArraySequence<T> extends ArraySequence<T> implements FixedSequ
      * @throws IllegalArgumentException if maxSize is negative.
      */
     public FixedArraySequence(int maxSize) {
-        maximumsize = maxSize;
+        if (maxSize < 0) throw new IllegalArgumentException();
+        else maximumsize = maxSize;
     }
 
     @Override
     public void push_front(T element) {
-        if(this.size()<maximumsize) super.push_top(element);
-        else throw new IllegalStateException();
+        if(this.size()>=maximumsize) throw new IllegalStateException();
+        else super.push_top(element);
+    }
+    @Override
+    public void push_top(T element) {
+        if(this.size()>=maximumsize) throw new IllegalStateException();
+        else super.push_top(element);
     }
 
     @Override
@@ -33,5 +39,16 @@ public class FixedArraySequence<T> extends ArraySequence<T> implements FixedSequ
     @Override
     public int maximumSize() {
         return maximumsize;
+    }
+
+    @Override
+    public void insert(int index, T element) {
+        if(this.size()>=maximumsize) throw new IllegalStateException();
+        else super.insert(index,element);
+    }
+    @Override
+    public void push_back(T element) {
+        if(this.size()>=maximumsize) throw new IllegalStateException();
+        else super.push_back(element);
     }
 }

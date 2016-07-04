@@ -17,6 +17,8 @@ public class ArraySequence<T> implements Sequence<T>, List<T>, Stack<T>, Queue<T
 
     @Override
     public void insert(int index, T element) {
+        if(element == null) return;
+
         if(index>values.length||index<0){
             throw new IndexOutOfBoundsException();
         }
@@ -33,7 +35,7 @@ public class ArraySequence<T> implements Sequence<T>, List<T>, Stack<T>, Queue<T
 
     @Override
     public T set(int index, T element) {
-        if(index>=values.length||index<0) throw new IndexOutOfBoundsException();
+        if(index>=values.length||index<0) throw new NoSuchElementException();
         T temp = values[index];
         values[index] = element;
         return temp;
@@ -41,13 +43,13 @@ public class ArraySequence<T> implements Sequence<T>, List<T>, Stack<T>, Queue<T
 
     @Override
     public T get(int index) {
-        if(index>=values.length||index<0) throw new IndexOutOfBoundsException();
+        if(index>=values.length||index<0) throw new NoSuchElementException();
         return values[index];
     }
 
     @Override
     public T remove(int index) {
-        if(index>=values.length||index<0) throw new IndexOutOfBoundsException();
+        if(index>=values.length||index<0) throw new NoSuchElementException();
         T[] tempvalues = values;
         this.values = (T[]) new Object[tempvalues.length-1];
         for(int i = 0;i<index;i++) values[i]=tempvalues[i];
@@ -60,10 +62,10 @@ public class ArraySequence<T> implements Sequence<T>, List<T>, Stack<T>, Queue<T
         T[] tempvalues = values;
         this.values = (T[]) new Object[tempvalues.length+1];
         for (int i = 0;i<tempvalues.length;i++){
-                this.values[i] = tempvalues[i];
-            }
-        this.values[tempvalues.length] = element;
+            this.values[i] = tempvalues[i];
         }
+        this.values[tempvalues.length] = element;
+    }
 
     @Override
     public T pop_front() {

@@ -1,8 +1,8 @@
 package assignment5.sequences;
 
 /**
- * @author Team Member A
- * @author Team Member B
+ * @author Milan Proell
+ * @author Annika Baldi
  */
 public class Main {
     public static void main(String[] args) {
