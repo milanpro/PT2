@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 public class ActorGraph {
 	
@@ -70,3 +72,68 @@ public class ActorGraph {
     }
     */
 }
+
+class GraphStruct{
+
+
+        }
+
+class Vertex{
+    private int id;
+    private String name;
+    private Comparator<Edge> comparator = new Comparator<Edge>() {
+        @Override
+        public int compare(Edge e1, Edge e2) {
+            return e1.getEdge().compareTo(e2.getEdge());
+        }
+    };
+    private TreeSet<Edge> edges = new TreeSet<>(comparator);
+    Vertex(int id, String name){
+        this.setId(id);
+        this.setName(name);
+    }
+
+    public void addEdge(Edge edge){
+        this.edges.add(edge);
+    }
+
+    public boolean hasEdge(Edge edge){
+        return edges.contains(edge);
+    }
+
+    // getter / setter
+    public String getName() {
+        return name;
+    }
+
+    private void setName(String name) {
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    private void setId(int id) {
+        this.id = id;
+    }
+}
+
+class Edge{
+    private String edge;
+    Edge(String v){
+        setEdge(v);
+    }
+
+    public boolean equ(Edge e) { return this.getEdge().equals(e.getEdge()); }
+
+    // getter/ setter
+    public String getEdge() {
+        return edge;
+    }
+
+    private void setEdge(String edge) {
+        this.edge = edge;
+    }
+}
+
