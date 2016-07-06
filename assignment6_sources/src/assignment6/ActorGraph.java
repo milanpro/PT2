@@ -23,27 +23,24 @@ public class ActorGraph {
 
                 String csvFile = ".\\assignment6_sources\\actors.csv";
                 BufferedReader br = null;
-                String line = "";
+                String line;
                 String cvsSplitBy1 = ",";
                 String cvsSplitBy2 = "\\|";
-
+                GraphStruct graph = new GraphStruct();
                 try {
                     int counter = 0;
                     br = new BufferedReader(new FileReader(csvFile));
                     br.readLine();
                     while ((line = br.readLine()) != null) {
-
+                        String[] movie = line.split(cvsSplitBy1);
+                        String[] actors = movie[2].split(cvsSplitBy2);
+                        Vertex vert = new Vertex(Integer.parseInt(movie[0]),movie[1]);
                         // use comma as separator
-                        String[] movies = line.split(cvsSplitBy1);
-                        String[] actors = movies[2].split(cvsSplitBy2);
-                        System.out.print("MovieID= " + movies[0]
-                                + " , MovieName=" + movies[1] + " Actors: ");
                         for(int i = 0; i<actors.length;i++){
-                            if(i==actors.length-1)System.out.println(" "+actors[i]);
-                            else System.out.print(", "+actors[i]);}
+                            vert.addEdge(new Edge(actors[i]));
+                            }
                         counter++;
                         if(counter==10) break;
-
                     }
 
                 } catch (FileNotFoundException e) {
@@ -65,29 +62,39 @@ public class ActorGraph {
 
 
     }
-    /*
+
     public static int baconness( String actor ) {
 		// TODO: return distance between "Kevin Bacon" and actor
         return 0;
     }
-    */
 }
 
 class GraphStruct{
-
+    final private Comparator<Vertex> comparator2 = new Comparator<Vertex>() {
+        @Override
+        public int compare(Vertex v1, Vertex v2) {
+            if (v1.size() > v2.size()) {
+                return -1;
+            }
+            else if (v1.size() < v2.size()) {
+                return 1;
+            }
+            else return 0;
 
         }
+    };
+    private TreeSet<Vertex> vertices= new TreeSet<>(comparator2);
+
+    public void addVertex(Vertex vertex) {
+        this.vertices.add(vertex);
+    }
+}
 
 class Vertex{
     private int id;
     private String name;
-    private Comparator<Edge> comparator = new Comparator<Edge>() {
-        @Override
-        public int compare(Edge e1, Edge e2) {
-            return e1.getEdge().compareTo(e2.getEdge());
-        }
-    };
-    private TreeSet<Edge> edges = new TreeSet<>(comparator);
+    final private Comparator<Edge> comparator = (e1, e2) -> e1.getEdge().compareTo(e2.getEdge());
+    final private TreeSet<Edge> edges = new TreeSet<>(comparator);
     Vertex(int id, String name){
         this.setId(id);
         this.setName(name);
@@ -106,6 +113,8 @@ class Vertex{
         return name;
     }
 
+    public int size() { return edges.size(); }
+
     private void setName(String name) {
         this.name = name;
     }
@@ -121,6 +130,7 @@ class Vertex{
 
 class Edge{
     private String edge;
+    private int bacon;
     Edge(String v){
         setEdge(v);
     }
@@ -135,5 +145,12 @@ class Edge{
     private void setEdge(String edge) {
         this.edge = edge;
     }
-}
 
+    public int getBacon() {
+        return bacon;
+    }
+
+    public void setBacon(int bacon) {
+        this.bacon = bacon;
+    }
+}
