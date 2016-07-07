@@ -1,24 +1,23 @@
 package assignment6;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class ActorGraph {
-	
-    public static void main( String[] args ) {
-        readcsv();
-        /*
+	public static GraphStruct a_graph;
+    public static void main(String[] args ) {
+        a_graph = readcsv();
+
 		System.out.println( baconness( "Kevin Bacon" ) ); // 0
 		System.out.println( baconness( "Tom Hanks" ) );   // 1
-		System.out.println( baconness( "Liam Neeson" ) ); // 2
-        */
+        System.out.println( baconness( "Liam Neeson" ) ); // 2
+
     }
-	
-	public static void readcsv() {
+
+	public static GraphStruct readcsv() {
         // TODO: read csv into graph-like structure
 
                 String csvFile = ".\\assignment6_sources\\actors.csv";
@@ -28,6 +27,7 @@ public class ActorGraph {
                 String cvsSplitBy2 = "\\|";
 
                 try {
+                    GraphStruct graph = new GraphStruct();
                     int counter = 0;
                     br = new BufferedReader(new FileReader(csvFile));
                     br.readLine();
@@ -35,17 +35,16 @@ public class ActorGraph {
 
                         // use comma as separator
                         String[] movies = line.split(cvsSplitBy1);
-                        String[] actors = movies[2].split(cvsSplitBy2);
-                        System.out.print("MovieID= " + movies[0]
-                                + " , MovieName=" + movies[1] + " Actors: ");
-                        for(int i = 0; i<actors.length;i++){
-                            if(i==actors.length-1)System.out.println(" "+actors[i]);
-                            else System.out.print(", "+actors[i]);}
-                        counter++;
-                        if(counter==10) break;
-
+                        if (movies.length == 3) {
+                            String[] actors = movies[2].split(cvsSplitBy2);
+                            //System.out.print("MovieID= " + movies[0]
+                            //        + " , MovieName=" + movies[1] + " Actors: ");
+                            graph.addConnectedVertList(actors);
+                        }
                     }
-
+                    graph.setBacon();
+                    graph.sortgraph();
+                    return graph;
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -59,49 +58,144 @@ public class ActorGraph {
                         }
                     }
                 }
+        return null;
+    }
 
-                System.out.println("Done");
+    public static int baconness(String actor ) {
+        if(a_graph.hasBacon()){
+            if(actor == a_graph.returnBacon().getName()){
+                return a_graph.returnBacon().getBaconness();
+            }
+            else{
+                return baconnesssearch(actor);
+            }
+        }
+        else return -1;
+    }
 
-
+    public static int baconnesssearch(String actor){
+        int thisbaconness = 1;
+                for (Map.Entry<String, Vertex> entry : a_graph.vertices.entrySet()) {
+                    if (a_graph.getBaconnessingraph() >= thisbaconness) {
+                        if (entry.getValue().getName() == actor) return entry.getValue().getBaconness();
+                        if (entry.getValue().getBaconness()!=thisbaconness)thisbaconness = entry.getValue().getBaconness();
+                    } else {
+                        if (entry.getValue().getBaconness() == thisbaconness) {
+                            a_graph.setBaconnessingraph(thisbaconness);
+                            thisbaconness++;
+                            System.out.println(thisbaconness - 1);
+                        }
+                        if (entry.getValue().getBaconness() == thisbaconness - 1) {
+                            for (Vertex newconn : entry.getValue().Connections()) {
+                                if (newconn.getName() == actor) {
+                                    return thisbaconness;
+                                }
+                                if (newconn.getBaconness() == -1){
+                                    newconn.setBaconness(thisbaconness);
+                                    a_graph.sortgraph();
+                                }
+                            }
+                        }
+                    }
+                    //baconness ab hier generieren
+                }
+                return -1;
 
     }
-    /*
-    public static int baconness( String actor ) {
-		// TODO: return distance between "Kevin Bacon" and actor
-        return 0;
-    }
-    */
+
+
 }
 
-class GraphStruct{
 
 
+class GraphStruct {
+    public Map<String, Vertex> vertices = new HashMap<String, Vertex>();
+    private Vertex Bacon;
+    private int baconnessingraph;
+    public Vertex getVert(String str) {
+        return vertices.get(str);
+    }
+    public void sortgraph(){
+        vertices = MapUtil.sortByValue( vertices );
+    }
+    public void addConnectedVertList(String[] vertices) {
+        ArrayList<Vertex> verts = new ArrayList<>();
+        Vertex temp;
+        for (String vertex : vertices) {
+            if (this.vertices.containsKey(vertex)) {
+                verts.add(this.vertices.get(vertex));
+            } else {
+                temp = new Vertex(vertex);
+                addVert(temp);
+                verts.add(temp);
+            }
         }
+        for (Vertex ver1 : verts){
+            for (Vertex ver2 : verts){
+                if(ver1 != ver2){
+                    if(!ver1.isConnected(ver2)) ver1.connectWith(ver2);
+                }
+            }
+        }
+    }
 
-class Vertex{
-    private int id;
+    public void addVert(Vertex v){
+        vertices.put(v.getName(),v);
+    }
+
+    public Boolean hasBacon(){
+        try{
+            return vertices.containsValue(Bacon);
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    public Vertex returnBacon(){
+        return Bacon;
+    }
+
+    public void setBacon(){
+        try{
+            Bacon = vertices.get("Kevin Bacon");
+            Bacon.setBaconness(0);
+            setBaconnessingraph(0);
+        }
+        catch (Exception e){
+            System.out.println("Kevin Bacon not in graph");
+        }
+    }
+
+    public int getBaconnessingraph() {
+        return baconnessingraph;
+    }
+
+    public void setBaconnessingraph(int baconnessingraph) {
+        this.baconnessingraph = baconnessingraph;
+    }
+}
+
+class Vertex implements Comparable{
     private String name;
-    private Comparator<Edge> comparator = new Comparator<Edge>() {
-        @Override
-        public int compare(Edge e1, Edge e2) {
-            return e1.getEdge().compareTo(e2.getEdge());
-        }
-    };
-    private TreeSet<Edge> edges = new TreeSet<>(comparator);
-    Vertex(int id, String name){
-        this.setId(id);
-        this.setName(name);
+    private int bacon;
+    private VertComparator comparator = new VertComparator();
+    private TreeSet<Vertex> connected = new TreeSet<>(comparator);
+    Vertex(String name){
+        setName(name);
+        this.bacon = -1;
     }
 
-    public void addEdge(Edge edge){
-        this.edges.add(edge);
+    public void connectWith(Vertex v){
+        this.connected.add(v);
     }
 
-    public boolean hasEdge(Edge edge){
-        return edges.contains(edge);
+    public boolean isConnected(Vertex v){
+        return connected.contains(v);
     }
+    public TreeSet<Vertex> Connections() { return connected; }
 
-    // getter / setter
+    public boolean equ(Vertex v) { return this.getName().equals(v.getName()); }
     public String getName() {
         return name;
     }
@@ -110,30 +204,47 @@ class Vertex{
         this.name = name;
     }
 
-    public int getId() {
-        return id;
+    public void setBaconness(int baconness) {
+        if (bacon == -1)this.bacon = baconness;
     }
 
-    private void setId(int id) {
-        this.id = id;
-    }
-}
-
-class Edge{
-    private String edge;
-    Edge(String v){
-        setEdge(v);
+    public int getBaconness(){
+            return this.bacon;
     }
 
-    public boolean equ(Edge e) { return this.getEdge().equals(e.getEdge()); }
-
-    // getter/ setter
-    public String getEdge() {
-        return edge;
-    }
-
-    private void setEdge(String edge) {
-        this.edge = edge;
+    @Override
+    public int compareTo(Object o) throws ClassCastException {
+        if (!(o instanceof Vertex))
+            throw new ClassCastException("A Vertex object expected.");
+        if(this.getBaconness()==-1&&((Vertex) o).getBaconness()==-1) return this.getName().compareTo(((Vertex) o).getName());
+        else if(this.getBaconness()==-1) return 1;
+        else if(((Vertex) o).getBaconness()==-1) return -1;
+        else if (this.getBaconness()>((Vertex) o).getBaconness()) return -1; // noch nicht generierte werte nach hinten packen
+        else if(this.getBaconness()<((Vertex) o).getBaconness()) return 1;
+        else return  this.getName().compareTo(((Vertex) o).getName());
     }
 }
 
+class VertComparator implements Comparator <Vertex> {
+    @Override
+    public int compare(Vertex v1, Vertex v2) {
+        return v1.compareTo(v2);
+    }
+}
+
+
+
+class MapUtil
+{
+    public static <K, V extends Comparable<? super V>> Map<K, V>
+    sortByValue( Map<K, V> map )
+    {
+        Map<K, V> result = new LinkedHashMap<>();
+        Stream<Map.Entry<K, V>> st = map.entrySet().stream();
+
+        st.sorted( Map.Entry.comparingByValue() )
+                .forEachOrdered( e -> result.put(e.getKey(), e.getValue()) );
+
+        return result;
+    }
+}
