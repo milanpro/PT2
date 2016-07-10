@@ -29,12 +29,25 @@ public class StringBloomfilter {
 	 * @param v the element to add
 	 */
 	public void add(String v) {
+        int modulo;
+		for(HashFunction<String> hashFunction : hashFunctions){
+            modulo = hashFunction.hash(v) % bits.length;
+            modulo = modulo<0?(modulo+bits.length):modulo;
+            bits[modulo] = true;
+        }
+        numberElements++;
 	}
 	/**
 	 * checks if w might be element of this collection
 	 * @param w the element to be checked
 	 */
 	public boolean mightContain(String w) {
+        int modulo;
+        for (HashFunction<String> hashFunction : hashFunctions){
+            modulo = hashFunction.hash(w) % bits.length;
+            modulo = modulo<0?(modulo+bits.length):modulo;
+            if(!bits[modulo]) return false;
+        }
 		return true;
 	}
 	/**
