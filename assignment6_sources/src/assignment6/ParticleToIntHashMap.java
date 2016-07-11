@@ -55,6 +55,9 @@ public class ParticleToIntHashMap {
 		if(key == null) throw new NullPointerException();
 		else{
 			int finalhash = f.hash(key)%s;
+            if(hashmap[finalhash] == null){
+                hashmap[finalhash] = new LinkedList<>();
+            }
 			hashmap[finalhash].add(new PartyParticle(value, key));
 		}
 	}
@@ -68,10 +71,10 @@ public class ParticleToIntHashMap {
 			party = hashmap[finalhash];
 			int i = 0;
 			while (true) {
-				if (party.get(i) == null) {
-					throw new NoSuchElementException();
+				if (party==null||party.size()<=i) {
+					return null;
 				} else {
-					if (party.get(i).getKey() == key) {
+					if (party.get(i).getKey().equals(key)) {
 						return party.get(i).getValue();
 					} else {
 						i++;
