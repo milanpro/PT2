@@ -41,6 +41,7 @@ public class ParticleToIntHashMapTest {
 			map.put(new Particle(i / 100, i % 100), i);
 		}
 		assertTrue(map.largestBucketSize() >= 100);
+		//System.out.println(map.largestBucketSize());
 		assertTrue(map.largestBucketSize() < 570);
 		
 		//Random testing is bad practice! However I want my test to be unpredictable by the students.
@@ -70,6 +71,7 @@ public class ParticleToIntHashMapTest {
 			map.put(key, 0);
 		}
 		assertTrue(map.largestBucketSize() >= 1);
+		System.out.println(map.largestBucketSize());
 		assertTrue(map.largestBucketSize() < 570);
 	}
 }

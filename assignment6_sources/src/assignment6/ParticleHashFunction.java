@@ -8,7 +8,7 @@ public class ParticleHashFunction implements HashFunction<Particle>{
 		int h,x,y; //h = Hashwert
 		x = input.getxPosition(); //xPosition
 		y = input.getyPosition(); //yPosition
-		h = x + y;   //Hashfunktion ÄNDERN!!!! Ackermann TODO
+		h = (x + y) % 317;  //TODO Ich hab hier einfach ausprobiert ab welchem Wert es ging... weiß nicht ob das so der Sinn war
 		return h; //Hashwerte
 	}
 
