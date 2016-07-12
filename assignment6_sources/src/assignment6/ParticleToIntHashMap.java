@@ -31,7 +31,7 @@ public class ParticleToIntHashMap {
 		}
 
 		public void setKey(Particle key){
-			if(key == null) throw new NullPointerException();
+			if(key == null) throw new NullPointerException(); //key darf nicht null sein
 			this.k = key;
 		}
 	}
@@ -41,43 +41,42 @@ public class ParticleToIntHashMap {
 	private int s; //size
 
 	public ParticleToIntHashMap(int size, HashFunction<Particle> hashFunction){
-		if(hashFunction == null) throw new NullPointerException();
+		if(hashFunction == null) throw new NullPointerException(); //hashFunction darf nicht null sein
 		hashmap = new LinkedList[size];
 		f = hashFunction;
-		if(size > 0){
+		if(size > 0){ //size muss größer 0 sein
 			s = size;
 		}
 		else{throw new IllegalArgumentException();}
 
 	}
 
-	public void put(Particle key, int value){
-		if(key == null) throw new NullPointerException();
+	public void put(Particle key, int value){ //einfügen in Hashmap
+		if(key == null) throw new NullPointerException(); //falls key null
 		else{
-			int finalhash = f.hash(key)%s;
-			finalhash = finalhash < 0 ? finalhash + s : finalhash;
-			//System.out.println(finalhash+"="+f.hash(key)+"%"+s+" x="+key.getxPosition()+" y="+key.getyPosition());
-			if(hashmap[finalhash] == null){
+			int finalhash = f.hash(key)%s; //%s um nur Hashwerte zu bekommen, die Index der Hashmap sind
+			finalhash = finalhash < 0 ? finalhash + s : finalhash; //keine negativen Hashwerte
+			if(hashmap[finalhash] == null){ //noch keine Linked Lists im Array
 				hashmap[finalhash] = new LinkedList<>();
 			}
-			hashmap[finalhash].add(new PartyParticle(value, key));
+			hashmap[finalhash].add(new PartyParticle(value, key)); //neues key, value Paar hinzufügen zur Linked List
 		}
 	}
 
 
 	public Integer get(Particle key) {
-		if (key == null) throw new NullPointerException();
+		if (key == null) throw new NullPointerException(); //falls key null
 		else {
-			int finalhash = f.hash(key) % s;
+			int finalhash = f.hash(key) % s; //finalhash berechnen
 			LinkedList<PartyParticle> party;
-			party = hashmap[finalhash];
+			party = hashmap[finalhash]; //LinkedList an Stelle finalhash in "party" speichern
 			int i = 0;
 			while (true) {
 				if (party==null||party.size()<=i) {
-					return null;
+					return null; //key gibt es nicht
 				} else {
-					if (party.get(i).getKey().equals(key)) {
-						return party.get(i).getValue();
+					if (party.get(i).getKey().equals(key)) { //falls keys gleich
+						return party.get(i).getValue(); //Wert zurückgeben
 					} else {
 						i++;
 					}
@@ -88,12 +87,12 @@ public class ParticleToIntHashMap {
 	}
 
 	public int largestBucketSize(){ //Bucket mit den meisten PartyParticeln --> davon Anzahl
-		int max = 0;
+		int max = 0; //Maximalwert
 		for (int j = 0; j < s; j++){
 			if(hashmap[j] != null){
-				if(!hashmap[j].isEmpty()){   //TODO braucht es das
-					if(max < hashmap[j].size()){
-						max = hashmap[j].size();
+				if(!hashmap[j].isEmpty()){ //falls LinkedList existent und nicht leer
+					if(max < hashmap[j].size()){ //falls max kleiner als size der aktuellen LinkedList
+						max = hashmap[j].size(); //max setzen
 					}
 				}}
 		}

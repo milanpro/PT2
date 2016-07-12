@@ -8,7 +8,7 @@ public class OtherParticleHashFunction implements HashFunction<Particle>{
 		int h,x,y; //h = Hashwert
 		x = input.getxPosition(); //xPosition
 		y = input.getyPosition(); //yPosition
-		h = (x % 317) + (y % 7);
+		h = (x % 317) + (y % 7); //neue Hashfunktion
 		return h; //Hashwerte
 	}
 
