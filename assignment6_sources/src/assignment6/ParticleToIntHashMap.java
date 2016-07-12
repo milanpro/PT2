@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 
 public class ParticleToIntHashMap {
 
-	private class PartyParticle{
+	private class PartyParticle{ //neues Objekt, was sowohl key, als auch value speichert
 		private Integer v; //Wert
 		private Particle k; //key
 
@@ -55,9 +55,11 @@ public class ParticleToIntHashMap {
 		if(key == null) throw new NullPointerException();
 		else{
 			int finalhash = f.hash(key)%s;
-            if(hashmap[finalhash] == null){
-                hashmap[finalhash] = new LinkedList<>();
-            }
+			finalhash = finalhash < 0 ? finalhash + s : finalhash;
+			//System.out.println(finalhash+"="+f.hash(key)+"%"+s+" x="+key.getxPosition()+" y="+key.getyPosition());
+			if(hashmap[finalhash] == null){
+				hashmap[finalhash] = new LinkedList<>();
+			}
 			hashmap[finalhash].add(new PartyParticle(value, key));
 		}
 	}
@@ -85,8 +87,16 @@ public class ParticleToIntHashMap {
 		}
 	}
 
-	public int largestBucketSize(){
-		//TODO implement
-		return 0;
+	public int largestBucketSize(){ //Bucket mit den meisten PartyParticeln --> davon Anzahl
+		int max = 0;
+		for (int j = 0; j < s; j++){
+			if(hashmap[j] != null){
+				if(!hashmap[j].isEmpty()){   //TODO braucht es das
+					if(max < hashmap[j].size()){
+						max = hashmap[j].size();
+					}
+				}}
+		}
+		return max;
 	}
 }
