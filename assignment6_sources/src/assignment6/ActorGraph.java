@@ -5,15 +5,27 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+/***
+ * - Hugo Weaving hat die baconness von 2
+ *
+ * - Es gibt 2193 actors mit baconness 4
+ *
+ * - Der baconnessdurchschnitt liegt bei 2,37 (mit abzug der nicht verknüpfbaren actors)
+ */
+
 public class ActorGraph {
 	public static GraphStruct a_graph;
     public static void main(String[] args ) {
         readcsv();
-
-		System.out.println( baconness( "Kevin Bacon" ) ); // 0
-		System.out.println( baconness( "Tom Hanks" ) );   // 1
+        System.out.println(baconness("Hugo Weaving"));
+		System.out.println(countbaconness(4));
+        double durchschnitt = (((double)(countbaconness(1)+countbaconness(2)*2+countbaconness(3)*3+countbaconness(4)*4+countbaconness(5)*5+countbaconness(6)*6))/((double) (a_graph.vertices.size()-1318)));
+        System.out.println(durchschnitt);
+        System.out.println();
+        System.out.println( baconness( "Kevin Bacon" ) ); // 0
+        System.out.println( baconness( "Tom Hanks" ) );   // 1
         System.out.println( baconness( "Liam Neeson" ) ); // 2
-
+        a_graph.getBaList().get(7).forEach(System.out::println);
     }
 
 	public static void readcsv() {
@@ -51,6 +63,15 @@ public class ActorGraph {
                 }
     }
 
+    public static int countbaconness(int baconness){ //Methode zum Zählen, wieviele schauspieler int baconess haben
+        for(String actor :a_graph.vertices.keySet()){
+            baconness(actor);
+            if (a_graph.bacdone[baconness-1]) return a_graph.getBaList().get(baconness).size(); //wenn baconness schon vollständig erfasst. anzahl ausgeben.
+        }
+        return 0;
+    }
+
+
     public static int baconness(String actor ) {
         if(a_graph.hasBacon()){ // wenn Bacon im graph
             if(actor.equals(a_graph.returnBacon().getName())){
@@ -67,29 +88,57 @@ public class ActorGraph {
     }
 
     public static int baconnesssearch(String actor,TreeSet<String> n_s, TreeSet<String> a_s, int baconness){
+        if(baconness!=0&&a_graph.getBaList().get(baconness).isEmpty()){//sobald keine verbindung mehr gefunden werden kann, werden restliche schauspieler ignoriert
+            return -1;
+        }
         baconness++;
-        TreeSet<String> new_next = new TreeSet<>();
-        for(String s_actor : n_s) // iteration über alle zu suchenden actors
-            if (a_graph.vertices.get(s_actor).Connections().contains(a_graph.getVert(actor))) return baconness; //falls actor gefunden
-            else {
-                a_s.add(s_actor); // schiebe schauspieler von next zu already searched
-                for (Vertex new_actor : a_graph.vertices.get(s_actor).Connections()) //falls nicht schon in einer liste, füge alle verbundenen actors zur neuen next liste
-                    if (!a_s.contains(new_actor.getName())&&!n_s.contains(new_actor.getName())&&!new_next.contains(new_actor.getName())) new_next.add(new_actor.getName());
-            }
-        return baconnesssearch(actor,new_next,a_s,baconness); // rekursiver aufruf, falls noch nicht gefunden
+        if(a_graph.getBaList().get(baconness).contains(actor)) return baconness; // wenn schauspieler bereits in eine der überprüften listen ist
+        else if(a_graph.bacdone[baconness-1]) return baconnesssearch(actor,a_graph.getBaList().get(baconness),a_s,baconness); //eine ebene muss nicht nochmal erarbeitet werden
+        else {
+            for (String s_actor : n_s){ // iteration über alle zu suchenden actors
+                if (a_graph.vertices.get(s_actor).Connections().contains(a_graph.getVert(actor))) {
+                    return baconness; //falls actor gefunden
+                } else {
+                    if(!a_s.contains(s_actor)) a_s.add(s_actor); // schiebe schauspieler von next zu already searched
+                    for (Vertex new_actor : a_graph.vertices.get(s_actor).Connections()) //falls nicht schon in einer liste, füge alle verbundenen actors zur neuen next liste
+                        if (!a_s.contains(new_actor.getName()) && !n_s.contains(new_actor.getName()) && !a_graph.getBaList().get(baconness).contains(new_actor.getName())){
+                            a_graph.getBaList().get(baconness).add(new_actor.getName());
+                }
+            }}
+            a_graph.bacdone[baconness-1] = true;
+            return baconnesssearch(actor,a_graph.getBaList().get(baconness),a_s,baconness); // rekursiver aufruf, falls noch nicht gefunden
+        }
+
     }
 
 
 }
 
 
-
 class GraphStruct {
     public SortedMap<String, Vertex> vertices = new TreeMap<String, Vertex>(); //sortedMap um über den String schnell den entsprechenden Vertex zu finden
     private Vertex Bacon; // pointer auf Bacon Vertex
-
+    private static final HashMap<Integer,TreeSet<String>> baconness; // Treesets um vertices für die jeweiligen baconness level einzuordnen
+                                                                     // Damit das Programm nur einmal die Berechnung durchführen muss
+    static {
+        baconness = new HashMap<>();
+        baconness.put(1,new TreeSet<>());
+        baconness.put(2,new TreeSet<>());
+        baconness.put(3,new TreeSet<>());
+        baconness.put(4,new TreeSet<>());
+        baconness.put(5,new TreeSet<>());
+        baconness.put(6,new TreeSet<>());
+        baconness.put(7,new TreeSet<>());
+        baconness.put(8,new TreeSet<>());
+        baconness.put(9,new TreeSet<>());
+    }
+    public static boolean[] bacdone = {false,false,false,false,false,false,false,false,false}; // boolean ob baconlevel vollständig bearbeitet
     public Vertex getVert(String str) {
         return vertices.get(str);
+    }
+
+    public static HashMap<Integer, TreeSet<String>> getBaList() {
+        return baconness;
     }
 
     public void addConnectedVertList(String[] vertices) { // hinzufügen einer liste an actors zum graphen
@@ -140,7 +189,7 @@ class GraphStruct {
     }
 }
 
-class Vertex implements Comparable{ // Vertex oder actor
+class Vertex implements Comparable{ // Vertex/actor
     private String name; // name des actors
     private TreeSet<Vertex> connected = new TreeSet<>(); // sortierte liste aller verbundenen actors mit diesem actor
     Vertex(String name){
